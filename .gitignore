@@ -6,3 +6,4 @@ core/__pycache__
 db.sqlite3
 authentication/__init__.py
 core/__init__.py
+authentication/__pycache__
