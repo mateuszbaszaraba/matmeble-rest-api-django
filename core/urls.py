@@ -10,5 +10,6 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/', include('authentication.urls', namespace='users')),
+    path('products/', include('products_api.urls', namespace='products'))
 ]
 
