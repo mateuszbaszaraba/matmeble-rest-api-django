@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Product, SoftFurniture, Armchair
+from . import models
 
-admin.site.register(Product)
-admin.site.register(SoftFurniture)
-admin.site.register(Armchair)
+
+@admin.register(models.Product)
+class Products(admin.ModelAdmin):
+    list_display = ('title', 'id', 'slug')
+
+
+admin.site.register(models.SoftFurniture)
+admin.site.register(models.Armchair)

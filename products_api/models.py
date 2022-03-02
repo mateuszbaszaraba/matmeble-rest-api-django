@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from django.template.defaultfilters import slugify
 
 
 class Product(models.Model):
@@ -10,7 +11,6 @@ class Product(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=50)
-    slug = models.CharField(max_length=50, default='test')
 
     height = models.CharField(max_length=30)
     width = models.CharField(max_length=30)
@@ -22,6 +22,9 @@ class Product(models.Model):
     container = models.IntegerField(null=True, blank=True)
     headrest = models.CharField(null=True, blank=True, choices=headrest_options, default='nieregulowany',
                                 max_length=30)
+
+    def slug(self):
+        return slugify(self.title)
 
     class Meta:
         ordering = ('title',)
