@@ -43,9 +43,9 @@ class SoftFurniture(Product):
 
 
 class Armchair(Product):
-    arm_options = (
+    trim_options = (
         ('niklowane', 'Niklowane'),
         ('drewniane', 'Drewniane'),
     )
-    trim = models.CharField(max_length=50, null=True, blank=True, choices=arm_options,
+    trim = models.CharField(max_length=50, null=True, blank=True, choices=trim_options,
                            default='drewniane')
