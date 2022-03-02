@@ -7,3 +7,6 @@ db.sqlite3
 authentication/__init__.py
 core/__init__.py
 authentication/__pycache__
+products_api/__pycache__
+products_api/migrations
+products_api/__init__.py
