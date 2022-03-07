@@ -3,6 +3,10 @@ import uuid
 from django.template.defaultfilters import slugify
 
 
+def upload_to(instance, filename):
+    return 'posts/{filename}'.format(filename=filename)
+
+
 class Product(models.Model):
     headrest_options = (
         ('regulowany', 'Regulowany'),
@@ -11,6 +15,7 @@ class Product(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=50)
+    image = models.ImageField(upload_to=upload_to)
 
     height = models.CharField(max_length=30)
     width = models.CharField(max_length=30)
