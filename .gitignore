@@ -10,3 +10,4 @@ authentication/__pycache__
 products_api/__pycache__
 products_api/migrations
 products_api/__init__.py
+media/products

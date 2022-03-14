@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 
 
 def upload_to(instance, filename):
-    return 'posts/{filename}'.format(filename=filename)
+    return 'products/{filename}'.format(filename=filename)
 
 
 class Product(models.Model):
@@ -20,10 +20,8 @@ class Product(models.Model):
     height = models.CharField(max_length=30)
     width = models.CharField(max_length=30)
     depth = models.CharField(max_length=30)
-    sleep_dim = models.CharField(max_length=30, null=True, blank=True)
 
     seat_depth = models.CharField(max_length=30)
-    sleep_func = models.BooleanField(null=True, blank=True, default=True)
     container = models.IntegerField(null=True, blank=True)
     headrest = models.CharField(null=True, blank=True, choices=headrest_options, default='nieregulowany',
                                 max_length=30)
@@ -43,8 +41,11 @@ class SoftFurniture(Product):
         ('tapicerowane', 'Tapicerowane'),
         ('drewniane', 'Drewniane'),
     )
+
     arm = models.CharField(max_length=50, null=True, blank=True, choices=arm_options,
                            default='tapicerowane')
+    sleep_func = models.BooleanField(null=True, blank=True, default=True)
+    sleep_dim = models.CharField(max_length=30, null=True, blank=True)
 
 
 class Armchair(Product):
@@ -52,5 +53,6 @@ class Armchair(Product):
         ('niklowane', 'Niklowane'),
         ('drewniane', 'Drewniane'),
     )
+
     trim = models.CharField(max_length=50, null=True, blank=True, choices=trim_options,
                            default='drewniane')
