@@ -60,6 +60,7 @@ class Armchair(Product):
     trim_options = (
         ('niklowane', 'Niklowane'),
         ('drewniane', 'Drewniane'),
+        ('tapicerowane', 'Tapicerowane'),
     )
 
     type_options = (

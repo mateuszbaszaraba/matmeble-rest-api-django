@@ -1,16 +1,40 @@
-from .models import Product
-from .serializers import ProductSerializer
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import generics, viewsets, status
+from .serializers import ProductSerializer, SoftFurnsSerializer, ArmchairSerializer
+from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
+from .models import SoftFurniture, Armchair, Product
+
+furn_types = ('kanapa', 'narożnik', 'wersalka', 'łóżko')
 
 
-class ProductList(generics.ListAPIView):
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+class ProductsView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request, format=None):
+        soft_furns = SoftFurniture.objects.all()
+        armchairs = Armchair.objects.all()
+        soft_furns_serialized = SoftFurnsSerializer(soft_furns, many=True)
+        armchairs_serialized = ArmchairSerializer(armchairs, many=True)
+        result_model = soft_furns_serialized.data + armchairs_serialized.data
+        return Response(result_model)
+
+    def post(self, request, format=None):
+        furn_type = request.data['type']
+
+        if furn_type in furn_types:
+            serializer = SoftFurnsSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = ArmchairSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductDetail(generics.RetrieveAPIView):
@@ -19,17 +43,3 @@ class ProductDetail(generics.RetrieveAPIView):
     def get_object(self, queryset=None, **kwargs):
         item = self.kwargs.get('pk')
         return get_object_or_404(Product, slug=item)
-
-
-class CreateProduct(APIView):
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
-
-    def post(self, request, format=None):
-        print(request.data)
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
