@@ -23,7 +23,7 @@ class Product(models.Model):
 
     seat_depth = models.CharField(max_length=30)
     container = models.IntegerField(null=True, blank=True)
-    headrest = models.CharField(null=True, blank=True, choices=headrest_options, default='nieregulowany',
+    headrest = models.CharField(choices=headrest_options, default='nieregulowany',
                                 max_length=30)
 
     def slug(self):
@@ -42,10 +42,18 @@ class SoftFurniture(Product):
         ('drewniane', 'Drewniane'),
     )
 
-    arm = models.CharField(max_length=50, null=True, blank=True, choices=arm_options,
+    type_options = (
+        ('narożnik', 'Narożnik'),
+        ('kanapa', 'Kanapa'),
+        ('wersalka', 'Wersalka'),
+        ('łóżko', 'Łóżko'),
+    )
+
+    type = models.CharField(max_length=50, choices=type_options)
+    arm = models.CharField(max_length=50, choices=arm_options,
                            default='tapicerowane')
-    sleep_func = models.BooleanField(null=True, blank=True, default=True)
-    sleep_dim = models.CharField(max_length=30, null=True, blank=True)
+    sleep_func = models.BooleanField(default=True)
+    sleep_dim = models.CharField(max_length=30)
 
 
 class Armchair(Product):
@@ -54,5 +62,11 @@ class Armchair(Product):
         ('drewniane', 'Drewniane'),
     )
 
-    trim = models.CharField(max_length=50, null=True, blank=True, choices=trim_options,
+    type_options = (
+        ('fotel', 'Fotel'),
+        ('pufa', 'Pufa'),
+    )
+
+    type = models.CharField(max_length=50, choices=type_options)
+    trim = models.CharField(max_length=50, choices=trim_options,
                            default='drewniane')
