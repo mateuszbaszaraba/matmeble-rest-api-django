@@ -14,13 +14,3 @@ class ArmchairSerializer(serializers.ModelSerializer):
         model = Armchair
         fields = ('id', 'slug', 'type', 'title', 'image', 'height', 'width', 'depth', 'seat_depth', 'container',
                   'headrest', 'trim')
-
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    sofas = SoftFurnsSerializer()
-    armchairs = ArmchairSerializer()
-
-    class Meta:
-        model = Product
-        fields = '__all__'
