@@ -5,7 +5,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from .models import SoftFurniture, Armchair
 
-furn_types = ('kanapa', 'narożnik', 'wersalka', 'łóżko')
+soft_furn_types = ('kanapa', 'narożnik', 'wersalka', 'łóżko')
+armchair_types = ('fotel', 'pufa')
 
 
 class ProductsView(APIView):
@@ -22,18 +23,20 @@ class ProductsView(APIView):
     def post(self, request, format=None):
         furn_type = request.data['type']
 
-        if furn_type in furn_types:
+        if furn_type in soft_furn_types:
             serializer = SoftFurnsSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
+        elif furn_type in armchair_types:
             serializer = ArmchairSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductDetail(APIView):
