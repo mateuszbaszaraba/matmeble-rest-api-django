@@ -37,9 +37,15 @@ class ProductsView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProductDetail(generics.RetrieveAPIView):
-    serializer_class = ProductSerializer
+class ProductDetail(APIView):
+    def get(self, request, *args, **kwargs):
+        slug = self.kwargs.get('pk')
 
-    def get_object(self, queryset=None, **kwargs):
-        item = self.kwargs.get('pk')
-        return get_object_or_404(Product, slug=item)
+        if SoftFurniture.objects.filter(slug=slug):
+            serialized_data = SoftFurnsSerializer(SoftFurniture.objects.get(slug=slug))
+            return Response(serialized_data.data, status=status.HTTP_200_OK)
+        elif Armchair.objects.filter(slug=slug):
+            serialized_data = ArmchairSerializer(Armchair.objects.get(slug=slug))
+            return Response(serialized_data.data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)

@@ -14,6 +14,7 @@ class Product(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    slug = models.SlugField(null=True, blank=True)
     title = models.CharField(max_length=50)
     image = models.ImageField(upload_to=upload_to)
 
@@ -26,8 +27,9 @@ class Product(models.Model):
     headrest = models.CharField(choices=headrest_options, default='nieregulowany',
                                 max_length=30)
 
-    def slug(self):
-        return slugify(self.title)
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Product, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ('title',)
