@@ -51,3 +51,17 @@ class ProductDetail(APIView):
             return Response(serialized_data.data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, *args, **kwargs):
+        slug = self.kwargs.get('pk')
+
+        if SoftFurniture.objects.filter(slug=slug):
+            obj = SoftFurniture.objects.filter(slug=slug)
+            obj.delete()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        elif Armchair.objects.filter(slug=slug):
+            obj = Armchair.objects.get(slug=slug)
+            obj.destroy()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
